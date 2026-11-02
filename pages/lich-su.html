@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#172554">
+  <title>Ôn tập Lịch sử – Trắc nghiệm và Đúng/Sai</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --paper: #ffffff;
+      --page: #f3f6fb;
+      --blue: #315bd6;
+      --blue-dark: #2448b7;
+      --blue-soft: #edf3ff;
+      --green: #15803d;
+      --green-soft: #ecfdf3;
+      --red: #b42318;
+      --red-soft: #fff1f0;
+      --amber: #a15c07;
+      --amber-soft: #fff8e8;
+      --shadow: 0 10px 30px rgba(15, 23, 42, .055);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    .topbar {
+      height: 8px;
+      background: linear-gradient(90deg, #2448b7, #5687ed, #8ab5ff);
+    }
+
+    .container {
+      width: min(920px, calc(100% - 32px));
+      margin: 34px auto 64px;
+    }
+
+    .hero {
+      padding: 30px;
+      border: 1px solid #dce6f7;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #fff 0%, #f2f6ff 100%);
+      box-shadow: var(--shadow);
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--blue-dark);
+      background: #e8efff;
+      border: 1px solid #d7e3ff;
+      border-radius: 999px;
+      padding: 5px 11px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 14px 0 7px;
+      font-size: clamp(25px, 4vw, 35px);
+      line-height: 1.2;
+      letter-spacing: -.035em;
+    }
+
+    .subtitle { margin: 0; color: var(--muted); font-size: 15px; }
+
+    .overview {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 17px 20px;
+      margin: 0 0 20px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .progress-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 9px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .progress-heading span:last-child { color: var(--muted); font-weight: 600; }
+    .progress-track { height: 8px; background: #e9eef6; border-radius: 99px; overflow: hidden; }
+    .progress-fill { width: 0%; height: 100%; background: var(--blue); border-radius: inherit; transition: width .2s ease; }
+
+    .overview-total {
+      min-width: 76px;
+      text-align: center;
+      padding-left: 16px;
+      border-left: 1px solid var(--line);
+    }
+    .overview-total strong { display: block; font-size: 23px; line-height: 1.1; }
+    .overview-total span { color: var(--muted); font-size: 11px; font-weight: 700; }
+
+    .section-heading {
+      margin: 28px 0 14px;
+      padding: 19px 22px;
+      border: 1px solid #dce6f7;
+      border-radius: 16px;
+      background: #f8faff;
+    }
+    .section-heading h2 { margin: 0 0 4px; font-size: 20px; }
+    .section-heading p { margin: 0; color: var(--muted); font-size: 13px; }
+    .question-list, .tf-list { display: grid; gap: 15px; }
+
+    .question-card {
+      padding: 22px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      box-shadow: var(--shadow);
+      scroll-margin-top: 20px;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .question-card:focus-within { border-color: #a9bff8; box-shadow: 0 0 0 3px rgba(49, 91, 214, .08), var(--shadow); }
+    .question-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 17px; }
+    .number {
+      flex: 0 0 37px;
+      height: 37px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background: var(--blue-soft);
+      color: var(--blue-dark);
+      font-size: 14px;
+      font-weight: 850;
+    }
+    .question-text { margin: 3px 0 0; font-size: 16px; font-weight: 750; line-height: 1.5; }
+    .options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .option {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      min-height: 57px;
+      padding: 12px 13px;
+      border: 1px solid #e1e7f0;
+      border-radius: 12px;
+      background: #fff;
+      cursor: pointer;
+      transition: background .15s ease, border-color .15s ease, transform .15s ease;
+    }
+    .option:hover { border-color: #a9bff8; background: #f8faff; }
+    .option:active { transform: scale(.995); }
+    .option input { position: absolute; opacity: 0; pointer-events: none; }
+    .option-letter {
+      flex: 0 0 28px;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: #f0f3f8;
+      color: #526078;
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .option-text { padding-top: 2px; color: #344054; font-size: 14px; }
+    .option:has(input:checked) { border-color: var(--blue); background: var(--blue-soft); box-shadow: inset 0 0 0 1px var(--blue); }
+    .option:has(input:checked) .option-letter { color: #fff; background: var(--blue); }
+    .option input:focus-visible + .option-letter { outline: 3px solid #9db6ff; outline-offset: 3px; }
+
+    .question-card.correct-card { border-color: #86d6a3; }
+    .question-card.wrong-card { border-color: #f0a5a0; }
+    .option.answer-correct { border-color: #45ae6b; background: var(--green-soft); }
+    .option.answer-correct .option-letter { color: #fff; background: var(--green); }
+    .option.answer-wrong { border-color: #e58b84; background: var(--red-soft); }
+    .option.answer-wrong .option-letter { color: #fff; background: var(--red); }
+    .option:has(input:disabled) { cursor: default; }
+    .option:has(input:disabled):hover { transform: none; }
+
+    .question-feedback {
+      display: none;
+      margin-top: 13px;
+      padding: 11px 13px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 650;
+    }
+    .question-feedback.show { display: block; }
+    .question-feedback.good { color: #166534; background: var(--green-soft); }
+    .question-feedback.bad { color: #991b1b; background: var(--red-soft); }
+    .question-feedback.empty { color: #854d0e; background: var(--amber-soft); }
+
+    .tf-question-card {
+      padding: 21px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      box-shadow: var(--shadow);
+      scroll-margin-top: 20px;
+    }
+    .tf-question-card.correct-card { border-color: #86d6a3; }
+    .tf-question-card.wrong-card { border-color: #f0a5a0; }
+    .tf-source {
+      margin: 0 0 17px;
+      padding: 14px 16px;
+      border-left: 4px solid #8aa8ef;
+      border-radius: 0 11px 11px 0;
+      background: #f5f8ff;
+      color: #475467;
+      font-size: 13px;
+      white-space: pre-line;
+    }
+    .tf-rows { display: grid; gap: 11px; }
+    .tf-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 13px;
+      border: 1px solid #e5eaf2;
+      border-radius: 12px;
+      background: #fff;
+    }
+    .tf-statement { font-size: 14px; color: #344054; }
+    .tf-statement strong { color: var(--blue-dark); margin-right: 5px; }
+    .tf-choices { display: flex; gap: 8px; }
+    .tf-choice {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 83px;
+      justify-content: center;
+      padding: 8px 10px;
+      border: 1px solid #dce3ed;
+      border-radius: 10px;
+      color: #475467;
+      background: #fff;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      transition: background .15s ease, border-color .15s ease;
+    }
+    .tf-choice input { position: absolute; opacity: 0; pointer-events: none; }
+    .tf-choice .tf-mark {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      border-radius: 7px;
+      background: #eef2f7;
+      color: #475467;
+      font-weight: 900;
+    }
+    .tf-choice:has(input:checked) { border-color: var(--blue); background: var(--blue-soft); color: var(--blue-dark); }
+    .tf-choice:has(input:checked) .tf-mark { background: var(--blue); color: #fff; }
+    .tf-choice:has(input:focus-visible) { outline: 3px solid #9db6ff; outline-offset: 2px; }
+    .tf-choice.correct-choice { border-color: #45ae6b; background: var(--green-soft); color: #166534; }
+    .tf-choice.correct-choice .tf-mark { background: var(--green); color: #fff; }
+    .tf-choice.wrong-choice { border-color: #e58b84; background: var(--red-soft); color: #991b1b; }
+    .tf-choice.wrong-choice .tf-mark { background: var(--red); color: #fff; }
+    .tf-choice:has(input:disabled) { cursor: default; }
+    .tf-feedback {
+      display: none;
+      grid-column: 1 / -1;
+      padding: 8px 10px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .tf-feedback.show { display: block; }
+    .tf-feedback.good { color: #166534; background: var(--green-soft); }
+    .tf-feedback.bad { color: #991b1b; background: var(--red-soft); }
+    .tf-feedback.empty { color: #854d0e; background: var(--amber-soft); }
+    .result-breakdown { margin: 15px 0 0; padding: 13px 15px; border: 1px solid var(--line); border-radius: 12px; background: #fff; font-size: 14px; line-height: 1.8; }
+
+    .submit-panel {
+      margin-top: 22px;
+      padding: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      box-shadow: var(--shadow);
+    }
+    .submit-note strong { display: block; font-size: 15px; }
+    .submit-note span { color: var(--muted); font-size: 13px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 9px; }
+    button {
+      border: 0;
+      border-radius: 11px;
+      padding: 12px 18px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background .15s ease, transform .15s ease;
+    }
+    button:active { transform: translateY(1px); }
+    button:focus-visible { outline: 3px solid #9db6ff; outline-offset: 3px; }
+    .primary-button { color: #fff; background: var(--blue); }
+    .primary-button:hover { background: var(--blue-dark); }
+    .secondary-button { color: #344054; background: #eef2f7; }
+    .secondary-button:hover { background: #e2e8f0; }
+    button:disabled { opacity: .6; cursor: default; }
+
+    .result-panel {
+      display: none;
+      margin-top: 22px;
+      padding: 25px;
+      border: 1px solid #cbd8f5;
+      border-radius: 18px;
+      background: linear-gradient(145deg, #fff, #f4f7ff);
+      box-shadow: var(--shadow);
+      scroll-margin-top: 20px;
+    }
+    .result-panel.show { display: block; }
+    .result-title { margin: 0 0 5px; font-size: 21px; }
+    .result-subtitle { margin: 0; color: var(--muted); font-size: 14px; }
+    .score-row { display: flex; align-items: center; gap: 18px; margin-top: 20px; }
+    .score-circle {
+      flex: 0 0 92px;
+      width: 92px;
+      height: 92px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #e8efff;
+      border: 6px solid #cad8ff;
+      color: var(--blue-dark);
+      font-size: 25px;
+      font-weight: 900;
+    }
+    .score-details { display: flex; flex-wrap: wrap; gap: 9px; }
+    .stat { min-width: 100px; padding: 10px 13px; border-radius: 11px; background: #fff; border: 1px solid var(--line); }
+    .stat strong { display: block; font-size: 19px; }
+    .stat span { color: var(--muted); font-size: 12px; }
+    .stat.good strong { color: var(--green); }
+    .stat.bad strong { color: var(--red); }
+    .stat.empty strong { color: var(--amber); }
+    .result-hint { margin: 17px 0 0; color: var(--muted); font-size: 13px; }
+    .footer { padding: 22px 0 0; text-align: center; color: #8490a3; font-size: 12px; }
+
+    @media (max-width: 640px) {
+      .container { width: min(100% - 20px, 920px); margin-top: 18px; }
+      .hero { padding: 22px 19px; border-radius: 17px; }
+      .overview { padding: 14px; }
+      .question-card, .tf-question-card { padding: 17px 14px; }
+      .question-text { font-size: 15px; }
+      .section-heading { padding: 16px; }
+      .section-heading h2 { font-size: 18px; }
+      .tf-row { grid-template-columns: 1fr; gap: 9px; }
+      .tf-choices { width: 100%; }
+      .tf-choice { flex: 1; }
+      .tf-feedback { grid-column: 1; }
+      .options { grid-template-columns: 1fr; gap: 8px; }
+      .option { min-height: 51px; padding: 10px 11px; }
+      .submit-panel { align-items: stretch; flex-direction: column; padding: 18px; }
+      .actions { display: grid; grid-template-columns: 1fr 1fr; }
+      .actions button { padding-inline: 10px; }
+      .score-row { align-items: flex-start; }
+      .score-circle { flex-basis: 78px; width: 78px; height: 78px; font-size: 21px; }
+      .stat { min-width: 85px; padding: 8px 10px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+    .back-home {
+      display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px;
+      padding: 9px 13px; border: 1px solid #dbe4f2; border-radius: 11px;
+      background: #fff; color: #2448b7; text-decoration: none; font-size: 13px; font-weight: 800;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, .035);
+    }
+    .back-home:hover { background: #f2f6ff; border-color: #b8c9ee; }
+  </style>
+</head>
+<body>
+  <div class="topbar"></div>
+  <main class="container">
+    <a class="back-home" href="../index.html">← Về menu chính</a>
+    <header class="hero">
+      <span class="eyebrow">BÀI ÔN TẬP · LỊCH SỬ</span>
+      <h1>Ôn tập Lịch sử – Phần I và Phần II</h1>
+      <p class="subtitle">Phần I: 20 câu trắc nghiệm. Phần II: 5 câu đúng/sai, mỗi câu gồm 4 ý. Mỗi lượt, câu hỏi ở cả hai phần được xáo trộn; đáp án A–D chỉ xáo trộn ở Phần I, còn các ý a, b, c, d của Phần II luôn giữ nguyên thứ tự.</p>
+    </header>
+
+    <section class="overview" aria-label="Tiến độ làm bài">
+      <div>
+        <div class="progress-heading"><span>Tiến độ làm bài</span><span id="progressText">Đã trả lời 0/40 ý</span></div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+      <div class="overview-total"><strong>40</strong><span>Ý CẦN LÀM</span></div>
+    </section>
+
+    <form id="quizForm">
+      <section class="section-heading">
+        <h2>PHẦN I. TRẮC NGHIỆM NHIỀU LỰA CHỌN</h2>
+        <p>Chọn một đáp án đúng nhất cho mỗi câu hỏi.</p>
+      </section>
+      <section class="question-list" id="questionList" aria-label="Phần I - Danh sách câu hỏi"></section>
+
+      <section class="section-heading">
+        <h2>PHẦN II. CÂU TRẮC NGHIỆM ĐÚNG, SAI</h2>
+        <p>Trong mỗi ý a, b, c, d, hãy chọn một trong hai ô Đ (Đúng) hoặc S (Sai).</p>
+      </section>
+      <section class="tf-list" id="trueFalseList" aria-label="Phần II - Câu hỏi đúng sai"></section>
+
+      <div class="submit-panel">
+        <div class="submit-note">
+          <strong>Đã hoàn thành bài làm?</strong>
+          <span>Mỗi câu Phần I và mỗi ý a–d Phần II đều được tính điểm. Tổng điểm quy đổi theo thang 10.</span>
+        </div>
+        <div class="actions">
+          <button class="secondary-button" type="button" id="resetButton">Làm lại</button>
+          <button class="primary-button" type="submit" id="submitButton">Nộp bài</button>
+        </div>
+      </div>
+    </form>
+
+    <section class="result-panel" id="resultPanel" aria-live="polite" tabindex="-1">
+      <h2 class="result-title" id="resultTitle">Kết quả bài làm</h2>
+      <p class="result-subtitle" id="resultSubtitle"></p>
+      <div class="score-row">
+        <div class="score-circle" id="scoreCircle">0/10</div>
+        <div class="score-details">
+          <div class="stat good"><strong id="correctCount">0</strong><span>Ý đúng / 40</span></div>
+          <div class="stat bad"><strong id="wrongCount">0</strong><span>Ý sai</span></div>
+          <div class="stat empty"><strong id="emptyCount">0</strong><span>Chưa trả lời</span></div>
+        </div>
+      </div>
+      <div class="result-breakdown" id="resultBreakdown"></div>
+      <p class="result-hint">Đáp án đúng được tô xanh. Lựa chọn sai của bạn được tô đỏ. Những ý bỏ trống cũng hiển thị đáp án đúng để đối chiếu.</p>
+    </section>
+
+    <footer class="footer">Bài luyện tập tự chấm điểm · 40 ý tính điểm · Có thể mở trực tiếp bằng trình duyệt, không cần Internet.</footer>
+  </main>
+
+  <script>
+    "use strict";
+
+    // Đáp án đúng được lưu bằng mã gốc của từng lựa chọn, không phụ thuộc vị trí A/B/C/D sau khi xáo trộn.
+    const questions = [
+      {
+        text: "Cuộc Cách mạng tư sản Anh bùng nổ vào giữa thế kỉ XVII gắn liền với sự kiện nào?",
+        options: [
+          ["A", "Quốc hội Anh triệu tập năm 1640."],
+          ["B", "Tuyên ngôn Độc lập của 13 thuộc địa được công bố."],
+          ["C", "Quần chúng nhân dân chiếm ngục Ba-xti."],
+          ["D", "Công xã Pa-ri được thành lập."]
+        ], answer: "A"
+      },
+      {
+        text: "Lực lượng lãnh đạo cuộc Cách mạng tư sản Anh ở thế kỉ XVII là",
+        options: [
+          ["A", "Chủ nô và giai cấp tư sản."],
+          ["B", "Giai cấp tư sản và nông dân."],
+          ["C", "Giai cấp tư sản và quý tộc mới."],
+          ["D", "Tầng lớp quý tộc phong kiến và tư sản."]
+        ], answer: "C"
+      },
+      {
+        text: "Kết quả nổi bật của cuộc Cách mạng tư sản Anh là gì?",
+        options: [
+          ["A", "Thiết lập nền cộng hòa xã hội chủ nghĩa."],
+          ["B", "Từng bước xác lập chế độ quân chủ lập hiến."],
+          ["C", "Thành lập một đế quốc thống nhất toàn châu Âu."],
+          ["D", "Xóa bỏ hoàn toàn mọi quan hệ phong kiến trên thế giới."]
+        ], answer: "B"
+      },
+      {
+        text: "Tuyên ngôn Độc lập của 13 thuộc địa Anh ở Bắc Mỹ được công bố năm nào?",
+        options: [["A", "1640."], ["B", "1688."], ["C", "1776."], ["D", "1789."]], answer: "C"
+      },
+      {
+        text: "Một trong những kết quả quan trọng của Chiến tranh giành độc lập của 13 thuộc địa Anh ở Bắc Mỹ là gì?",
+        options: [
+          ["A", "Thành lập Vương quốc Anh."],
+          ["B", "Thống nhất toàn bộ châu Mỹ."],
+          ["C", "Thành lập Hợp chúng quốc Hoa Kỳ."],
+          ["D", "Khôi phục chế độ phong kiến ở Bắc Mỹ."]
+        ], answer: "C"
+      },
+      {
+        text: "Sự kiện mở đầu cho giai đoạn cách mạng phát triển mạnh ở Pháp năm 1789 là gì?",
+        options: [
+          ["A", "Thành lập Quốc tế thứ nhất."],
+          ["B", "Chiến tranh thế giới thứ nhất bùng nổ."],
+          ["C", "Công bố Tuyên ngôn Độc lập của Hoa Kỳ."],
+          ["D", "Quần chúng nhân dân tấn công pháo đài – nhà tù Ba-xti."]
+        ], answer: "D"
+      },
+      {
+        text: "Khẩu hiệu nổi tiếng gắn liền với Cách mạng tư sản Pháp cuối thế kỉ XVIII là gì?",
+        options: [
+          ["A", "Tự do – Bình đẳng – Bác ái."],
+          ["B", "Dân tộc – Dân chủ – Tiến bộ."],
+          ["C", "Hòa bình – Hữu nghị – Hợp tác."],
+          ["D", "Độc lập – Thống nhất – Chủ quyền."]
+        ], answer: "A"
+      },
+      {
+        text: "Ý nghĩa quan trọng của Cách mạng tư sản Pháp cuối thế kỉ XVIII đối với nước Pháp là gì?",
+        options: [
+          ["A", "Khôi phục các đặc quyền của tầng lớp tăng lữ và quý tộc."],
+          ["B", "Chấm dứt mọi cuộc đấu tranh xã hội trên thế giới."],
+          ["C", "Củng cố vĩnh viễn quyền lực tuyệt đối của nhà vua."],
+          ["D", "Lật đổ chế độ quân chủ chuyên chế, tạo điều kiện cho chủ nghĩa tư bản phát triển."]
+        ], answer: "D"
+      },
+      {
+        text: "Trước Cách mạng tư sản Pháp cuối thế kỉ XVIII, xã hội Pháp được chia thành những đẳng cấp nào?",
+        options: [
+          ["A", "Nông dân và nô lệ."],
+          ["B", "Quý tộc, tư sản và công nhân."],
+          ["C", "Tăng lữ, quý tộc và Đẳng cấp thứ ba."],
+          ["D", "Địa chủ, nông dân và nô lệ."]
+        ], answer: "C"
+      },
+      {
+        text: "Sự kiện nào đánh dấu sự mở đầu của Cách mạng tư sản Pháp năm 1789?",
+        options: [
+          ["A", "Na-pô-lê-ông lên ngôi hoàng đế."],
+          ["B", "Nền Cộng hòa Pháp được thành lập."],
+          ["C", "Nhân dân tấn công pháo đài – nhà tù Ba-xti."],
+          ["D", "Vua Lu-i XVI triệu tập Hội nghị ba đẳng cấp."]
+        ], answer: "C"
+      },
+      {
+        text: "Tính chất cơ bản của Cách mạng tư sản Pháp cuối thế kỉ XVIII là gì?",
+        options: [
+          ["A", "Cách mạng xã hội chủ nghĩa."],
+          ["B", "Cách mạng tư sản."],
+          ["C", "Cách mạng vô sản."],
+          ["D", "Cách mạng giải phóng dân tộc ở thuộc địa."]
+        ], answer: "B"
+      },
+      {
+        text: "Ý nghĩa quan trọng của Cách mạng tư sản Pháp cuối thế kỉ XVIII đối với nước Pháp là gì?",
+        options: [
+          ["A", "Khôi phục các đặc quyền của tầng lớp tăng lữ và quý tộc."],
+          ["B", "Chấm dứt mọi cuộc đấu tranh xã hội trên thế giới."],
+          ["C", "Củng cố vĩnh viễn quyền lực tuyệt đối của nhà vua."],
+          ["D", "Lật đổ chế độ quân chủ chuyên chế, tạo điều kiện cho chủ nghĩa tư bản phát triển."]
+        ], answer: "D"
+      },
+      {
+        text: "Ngành sản xuất nào ở Anh có những bước tiến quan trọng đầu tiên trong Cách mạng công nghiệp?",
+        options: [
+          ["A", "Dệt."],
+          ["B", "Sản xuất ô tô."],
+          ["C", "Khai thác dầu mỏ."],
+          ["D", "Công nghiệp điện tử."]
+        ], answer: "A"
+      },
+      {
+        text: "Năm 1764, Giêm Ha-gri-vơ (James Hargreaves) đã phát minh ra máy nào?",
+        options: [
+          ["A", "Máy hơi nước."],
+          ["B", "Đầu máy xe lửa."],
+          ["C", "Máy kéo sợi Gien-ni."],
+          ["D", "Máy dệt chạy bằng sức nước."]
+        ], answer: "C"
+      },
+      {
+        text: "Phát minh nào được xem là mở đầu cho cuộc Cách mạng công nghiệp ở Anh vào giữa thế kỉ XVIII?",
+        options: [
+          ["A", "Máy hơi nước của Giêm Oát."],
+          ["B", "Đầu máy xe lửa của Xơ-ti-phen-xơn."],
+          ["C", "Máy kéo sợi Gien-ni của Giêm Ha-gri-vơ."],
+          ["D", "Máy dệt chạy bằng sức nước của E. Cát-rai."]
+        ], answer: "C"
+      },
+      {
+        text: "Nhận định nào sau đây phản ánh đúng một tác động quan trọng của Cách mạng công nghiệp?",
+        options: [
+          ["A", "Làm cho sản xuất công nghiệp hoàn toàn biến mất."],
+          ["B", "Xóa bỏ ngay lập tức mọi bất bình đẳng xã hội."],
+          ["C", "Làm thay đổi phương thức sản xuất và thúc đẩy sự phát triển của chủ nghĩa tư bản."],
+          ["D", "Khiến các thành phố không còn phát triển."]
+        ], answer: "C"
+      },
+      {
+        text: "Vào giữa thế kỉ XVI, thực dân Tây Ban Nha đã hoàn thành việc xâm chiếm và áp đặt ách thống trị lên quốc gia nào ở Đông Nam Á?",
+        options: [
+          ["A", "In-đô-nê-xi-a."],
+          ["B", "Phi-líp-pin."],
+          ["C", "Mã Lai."],
+          ["D", "Miến Điện."]
+        ], answer: "B"
+      },
+      {
+        text: "Một hậu quả quan trọng của xung đột Nam – Bắc triều và Trịnh – Nguyễn là gì?",
+        options: [
+          ["A", "Đất nước được thống nhất ngay lập tức."],
+          ["B", "Đất nước bị chia cắt trong thời gian dài, đời sống nhân dân gặp nhiều khó khăn."],
+          ["C", "Việt Nam trở thành thuộc địa của Anh ngay trong thế kỉ XVII."],
+          ["D", "Chế độ phong kiến chấm dứt hoàn toàn."]
+        ], answer: "B"
+      },
+      {
+        text: "Ranh giới chia cắt đất nước thành Đàng Ngoài và Đàng Trong trong cuộc xung đột Trịnh – Nguyễn là",
+        options: [
+          ["A", "Đèo Ngang."],
+          ["B", "Sông Bến Hải."],
+          ["C", "Sông Gianh (Quảng Bình)."],
+          ["D", "Đèo Hải Vân."]
+        ], answer: "C"
+      },
+      {
+        text: "Ý nghĩa quan trọng của quá trình khai phá vùng đất phía Nam từ thế kỉ XVI đến thế kỉ XVIII là gì?",
+        options: [
+          ["A", "Làm thu hẹp phạm vi cư trú của người Việt."],
+          ["B", "Chấm dứt mọi hoạt động giao lưu văn hóa."],
+          ["C", "Góp phần mở rộng lãnh thổ, hình thành các cộng đồng cư dân và phát triển kinh tế – xã hội."],
+          ["D", "Làm cho toàn bộ vùng đất phía Nam trở thành thuộc địa phương Tây."]
+        ], answer: "C"
+      }
+    ];
+
+    const trueFalseQuestions = [
+      {
+        id: 1,
+        source: "\"Chiến tranh giành độc lập của thuộc địa Anh ở Bắc Mỹ là cuộc 'chiến tranh vĩ đại, chiến tranh thực sự giải phóng, thực sự cách mạng'.\"\n(Theo Lê-nin, Toàn tập, NXB Sự thật, 1971, tr. 70; trích theo SGK Lịch sử và Địa lí 8, tr. 11)",
+        statements: [
+          { key: "a", text: "Tư liệu phản ánh đánh giá của V. I. Lê-nin về cuộc chiến tranh giành độc lập của 13 thuộc địa Anh ở Bắc Mỹ.", answer: "Đ" },
+          { key: "b", text: "Theo tư liệu, cuộc chiến tranh giành độc lập của 13 thuộc địa Anh ở Bắc Mỹ chỉ là một cuộc nổi dậy cục bộ, không mang tính chất giải phóng hay cách mạng.", answer: "S" },
+          { key: "c", text: "Kết hợp tư liệu với kiến thức đã học, có thể khẳng định thắng lợi của cuộc chiến tranh giành độc lập đã dẫn đến sự ra đời của Hợp chủng quốc Mỹ.", answer: "Đ" },
+          { key: "d", text: "Từ tư liệu và kiến thức đã học, có thể kết luận mục tiêu chính của cuộc chiến tranh là khôi phục quyền cai trị của thực dân Anh tại 13 thuộc địa.", answer: "S" }
+        ]
+      },
+      {
+        id: 2,
+        source: "Năm 1784, Giêm Oát phát minh ra máy hơi nước; năm 1785, E. Cát-rai phát minh máy dệt; năm 1814, Xti-phen-xơn chế tạo thành công đầu máy xe lửa chạy bằng hơi nước. Những thành tựu này góp phần làm tăng năng suất và thúc đẩy giao thông vận tải.",
+        statements: [
+          { key: "a", text: "Thông tin nêu một số thành tựu tiêu biểu của Cách mạng công nghiệp ở Anh.", answer: "Đ" },
+          { key: "b", text: "Máy hơi nước chỉ được sử dụng trong nông nghiệp, không liên quan đến hoạt động giao thông vận tải.", answer: "S" },
+          { key: "c", text: "Từ các thành tựu nêu trên, có thể nhận xét máy móc góp phần tăng năng suất và thúc đẩy vận tải.", answer: "Đ" },
+          { key: "d", text: "Các thành tựu được nêu trong tư liệu đều diễn ra trong thế kỉ XVIII.", answer: "S" }
+        ]
+      },
+      {
+        id: 3,
+        source: '"Chúng tôi cho rằng, những sự thật sau đây là hiển nhiên. Mọi người sinh ra đều có quyền bình đẳng. Tạo hoá ban cho họ những quyền không thể tước bỏ. Trong số những quyền ấy có quyền được sống, quyền được tự do và quyền mưu cầu hạnh phúc" (Trích Tuyên ngôn Độc lập của Hợp chủng quốc Mỹ, 1776).\n\n"Người ta sinh ra tự do và bình đẳng về quyền lợi, và phải luôn luôn được tự do và bình đẳng về quyền lợi" (Trích Tuyên ngôn Nhân quyền và Dân quyền của Pháp, 1789).',
+        statements: [
+          { key: "a", text: "Đoạn tư liệu trích dẫn văn kiện tiêu biểu của Chiến tranh giành độc lập 13 thuộc địa Anh ở Bắc Mỹ và Cách mạng tư sản Pháp.", answer: "Đ" },
+          { key: "b", text: "Cả hai bản tuyên ngôn đều khẳng định quyền tự do, bình đẳng tự nhiên của con người.", answer: "Đ" },
+          { key: "c", text: "Chủ tịch Hồ Chí Minh đã trích dẫn nội dung của hai bản tuyên ngôn này trong bản Tuyên ngôn Độc lập (2/9/1945) của nước Việt Nam Dân chủ Cộng hòa.", answer: "Đ" },
+          { key: "d", text: "Bản Tuyên ngôn Độc lập của Mỹ (1776) đã xóa bỏ hoàn toàn chế độ nô lệ da đen và người da đỏ trên toàn lãnh thổ Mỹ.", answer: "S" }
+        ]
+      },
+      {
+        id: 4,
+        source: "Trong thế kỉ XVI-XVII, những mâu thuẫn về quyền lực trong nội bộ tầng lớp thống trị dẫn đến các cuộc xung đột kéo dài. Xung đột Nam – Bắc triều và chiến tranh Trịnh – Nguyễn làm đất nước bị chia cắt, gây ra nhiều hậu quả đối với đời sống nhân dân.",
+        statements: [
+          { key: "a", text: "Xung đột Nam – Bắc triều và chiến tranh Trịnh – Nguyễn diễn ra trong các thế kỉ XVI-XVII.", answer: "Đ" },
+          { key: "b", text: "Những cuộc xung đột này gắn với tranh chấp quyền lực giữa các tập đoàn phong kiến.", answer: "Đ" },
+          { key: "c", text: "Các cuộc chiến tranh giữa các tập đoàn phong kiến đã góp phần củng cố sự thống nhất lãnh thổ và chính quyền trên cả nước ngay trong thời gian chiến tranh.", answer: "S" },
+          { key: "d", text: "Từ hậu quả của các cuộc xung đột, có thể nhận xét rằng tranh chấp quyền lực kéo dài có thể làm suy yếu đất nước và ảnh hưởng tiêu cực đến đời sống nhân dân.", answer: "Đ" }
+        ]
+      },
+      {
+        id: 5,
+        source: '"Năm 1698 đánh dấu một sự kiện quan trọng khi chúa Nguyễn cử Nguyễn Hữu Cảnh xuống kinh lí vùng Đông Phố, đặt phủ Gia Định, lấy xứ Đồng Nai làm huyện Phước Long, dựng dinh Trấn Biên, lấy xứ Sài Gòn làm huyện Tân Bình, dựng dinh Phiên Trấn... Trong cuộc khai phá vùng đất phía Nam, thời các chúa Nguyễn, đã rất chú trọng việc thực thi chủ quyền đối với các đảo, quần đảo ở Biển Đông thông qua đội Hoàng Sa và đội Bắc Hải."\n(Sách giáo khoa Lịch sử và Địa lí 8, Kết nối tri thức, tr. 29)',
+        statements: [
+          { key: "a", text: "Năm 1698, Phủ Gia Định được thành lập, đánh dấu việc xác lập hệ thống hành chính chính thức của chúa Nguyễn tại vùng đất Nam Bộ.", answer: "Đ" },
+          { key: "b", text: "Dinh Trấn Biên và dinh Phiên Trấn là những đơn vị hành chính thuộc vùng đất Tây Bắc Việt Nam hiện nay.", answer: "S" },
+          { key: "c", text: "Đội Hoàng Sa và đội Bắc Hải là các tổ chức dân binh do chúa Nguyễn thành lập nhằm mục đích khai thác và thực thi chủ quyền liên tục tại hai quần đảo Hoàng Sa, Trường Sa.", answer: "Đ" },
+          { key: "d", text: "Quá trình di dân và khai phá phía Nam của các chúa Nguyễn kéo theo sự diệt vong hoàn toàn của văn hóa các cộng đồng cư dân bản địa tại Nam Bộ.", answer: "S" }
+        ]
+      }
+    ];
+
+    const letters = ["A", "B", "C", "D"];
+    const questionList = document.getElementById("questionList");
+    const trueFalseList = document.getElementById("trueFalseList");
+    const quizForm = document.getElementById("quizForm");
+    const progressText = document.getElementById("progressText");
+    const progressFill = document.getElementById("progressFill");
+    const submitButton = document.getElementById("submitButton");
+    const resetButton = document.getElementById("resetButton");
+    const resultPanel = document.getElementById("resultPanel");
+
+    let submitted = false;
+    let displayedQuestions = [];
+    let displayedTrueFalseQuestions = [];
+
+    function shuffle(array) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function renderQuiz() {
+      submitted = false;
+      // Phần I: xáo trộn câu hỏi và các lựa chọn A/B/C/D.
+      displayedQuestions = shuffle(questions).map((question) => ({
+        ...question,
+        shuffledOptions: shuffle(question.options)
+      }));
+
+      // Phần II: chỉ xáo trộn 5 câu hỏi. Sao chép mảng statements nhưng giữ nguyên thứ tự a, b, c, d.
+      displayedTrueFalseQuestions = shuffle(trueFalseQuestions).map((question) => ({
+        ...question,
+        statements: [...question.statements]
+      }));
+
+      questionList.innerHTML = displayedQuestions.map((question, index) => {
+        const optionsHTML = question.shuffledOptions.map((option, optionIndex) => `
+          <label class="option" data-option-id="${option[0]}">
+            <input type="radio" name="question-${index}" value="${option[0]}" aria-label="Câu ${index + 1}, đáp án ${letters[optionIndex]}">
+            <span class="option-letter">${letters[optionIndex]}</span>
+            <span class="option-text">${escapeHTML(option[1])}</span>
+          </label>
+        `).join("");
+
+        return `
+          <article class="question-card" id="question-${index}">
+            <div class="question-top">
+              <span class="number">${String(index + 1).padStart(2, "0")}</span>
+              <h3 class="question-text">${escapeHTML(question.text)}</h3>
+            </div>
+            <div class="options">${optionsHTML}</div>
+            <div class="question-feedback" id="feedback-${index}" aria-live="polite"></div>
+          </article>
+        `;
+      }).join("");
+
+      trueFalseList.innerHTML = displayedTrueFalseQuestions.map((question, index) => {
+        const statementsHTML = question.statements.map((statement) => `
+          <div class="tf-row" id="tf-row-${index}-${statement.key}">
+            <div class="tf-statement"><strong>${statement.key})</strong>${escapeHTML(statement.text)}</div>
+            <div class="tf-choices" role="group" aria-label="Ý ${statement.key}, câu ${index + 1}">
+              <label class="tf-choice" data-choice="Đ">
+                <input type="radio" name="tf-${index}-${statement.key}" value="Đ" aria-label="${statement.key}, Đúng">
+                <span class="tf-mark">Đ</span><span>Đúng</span>
+              </label>
+              <label class="tf-choice" data-choice="S">
+                <input type="radio" name="tf-${index}-${statement.key}" value="S" aria-label="${statement.key}, Sai">
+                <span class="tf-mark">S</span><span>Sai</span>
+              </label>
+            </div>
+            <div class="tf-feedback" id="tf-feedback-${index}-${statement.key}" aria-live="polite"></div>
+          </div>
+        `).join("");
+
+        return `
+          <article class="tf-question-card" id="tf-question-${index}">
+            <div class="question-top">
+              <span class="number">${String(question.id).padStart(2, "0")}</span>
+              <h3 class="question-text">Câu ${question.id}. Cho đoạn tư liệu/thông tin sau:</h3>
+            </div>
+            <blockquote class="tf-source">${escapeHTML(question.source)}</blockquote>
+            <div class="tf-rows">${statementsHTML}</div>
+          </article>
+        `;
+      }).join("");
+
+      questionList.querySelectorAll("input[type='radio']").forEach((input) => {
+        input.addEventListener("change", updateProgress);
+      });
+      trueFalseList.querySelectorAll("input[type='radio']").forEach((input) => {
+        input.addEventListener("change", updateProgress);
+      });
+
+      resultPanel.classList.remove("show");
+      resultPanel.querySelector(".result-title").textContent = "Kết quả bài làm";
+      submitButton.disabled = false;
+      submitButton.textContent = "Nộp bài";
+      updateProgress();
+    }
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, (character) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[character]);
+    }
+
+    function updateProgress() {
+      const answeredMultipleChoice = questions.reduce((count, question, index) => {
+        return count + (document.querySelector(`input[name="question-${index}"]:checked`) ? 1 : 0);
+      }, 0);
+      const answeredTrueFalse = displayedTrueFalseQuestions.reduce((count, question, index) => {
+        return count + question.statements.filter(statement =>
+          document.querySelector(`input[name="tf-${index}-${statement.key}"]:checked`)
+        ).length;
+      }, 0);
+      const answered = answeredMultipleChoice + answeredTrueFalse;
+      progressText.textContent = `Đã trả lời ${answered}/40 ý`;
+      progressFill.style.width = `${(answered / 40) * 100}%`;
+    }
+
+    function getLetterForOption(questionIndex, optionId) {
+      const optionIndex = displayedQuestions[questionIndex].shuffledOptions.findIndex(option => option[0] === optionId);
+      return optionIndex >= 0 ? letters[optionIndex] : "?";
+    }
+
+    function getOptionText(questionIndex, optionId) {
+      const option = displayedQuestions[questionIndex].shuffledOptions.find(item => item[0] === optionId);
+      return option ? option[1] : "";
+    }
+
+    function submitQuiz(event) {
+      event.preventDefault();
+      if (submitted) return;
+
+      let multipleChoiceCorrect = 0;
+      let multipleChoiceWrong = 0;
+      let multipleChoiceUnanswered = 0;
+      let trueFalseCorrect = 0;
+      let trueFalseWrong = 0;
+      let trueFalseUnanswered = 0;
+
+      // Chấm Phần I: mỗi câu trắc nghiệm là một ý tính điểm.
+      displayedQuestions.forEach((question, index) => {
+        const card = document.getElementById(`question-${index}`);
+        const selectedInput = document.querySelector(`input[name="question-${index}"]:checked`);
+        const selectedId = selectedInput ? selectedInput.value : null;
+        const correctId = question.answer;
+        const correctLetter = getLetterForOption(index, correctId);
+        const correctText = getOptionText(index, correctId);
+        const feedback = document.getElementById(`feedback-${index}`);
+
+        card.querySelectorAll("input").forEach(input => { input.disabled = true; });
+        card.querySelectorAll(".option").forEach(label => {
+          const id = label.dataset.optionId;
+          if (id === correctId) label.classList.add("answer-correct");
+          if (selectedId && id === selectedId && selectedId !== correctId) label.classList.add("answer-wrong");
+        });
+
+        if (selectedId === correctId) {
+          multipleChoiceCorrect++;
+          card.classList.add("correct-card");
+          feedback.className = "question-feedback show good";
+          feedback.textContent = `Chính xác! Đáp án đúng: ${correctLetter}. ${correctText}`;
+        } else if (selectedId) {
+          multipleChoiceWrong++;
+          const selectedLetter = getLetterForOption(index, selectedId);
+          const selectedText = getOptionText(index, selectedId);
+          card.classList.add("wrong-card");
+          feedback.className = "question-feedback show bad";
+          feedback.textContent = `Chưa chính xác. Bạn chọn: ${selectedLetter}. ${selectedText} | Đáp án đúng: ${correctLetter}. ${correctText}`;
+        } else {
+          multipleChoiceUnanswered++;
+          card.classList.add("wrong-card");
+          feedback.className = "question-feedback show empty";
+          feedback.textContent = `Bạn chưa trả lời câu này. Đáp án đúng: ${correctLetter}. ${correctText}`;
+        }
+      });
+
+      // Chấm Phần II: từng ý a, b, c, d được tính điểm độc lập.
+      displayedTrueFalseQuestions.forEach((question, index) => {
+        const card = document.getElementById(`tf-question-${index}`);
+        let questionHasError = false;
+
+        question.statements.forEach((statement) => {
+          const row = document.getElementById(`tf-row-${index}-${statement.key}`);
+          const selectedInput = document.querySelector(`input[name="tf-${index}-${statement.key}"]:checked`);
+          const selected = selectedInput ? selectedInput.value : null;
+          const correct = statement.answer;
+          const feedback = document.getElementById(`tf-feedback-${index}-${statement.key}`);
+
+          row.querySelectorAll("input").forEach(input => { input.disabled = true; });
+          row.querySelectorAll(".tf-choice").forEach(label => {
+            const value = label.dataset.choice;
+            if (value === correct) label.classList.add("correct-choice");
+            if (selected && value === selected && selected !== correct) label.classList.add("wrong-choice");
+          });
+
+          const correctText = correct === "Đ" ? "Đúng" : "Sai";
+          if (selected === correct) {
+            trueFalseCorrect++;
+            feedback.className = "tf-feedback show good";
+            feedback.textContent = `Chính xác. Đáp án: ${correctText}.`;
+          } else if (selected) {
+            trueFalseWrong++;
+            questionHasError = true;
+            const selectedText = selected === "Đ" ? "Đúng" : "Sai";
+            feedback.className = "tf-feedback show bad";
+            feedback.textContent = `Bạn chọn: ${selectedText}. Đáp án đúng: ${correctText}.`;
+          } else {
+            trueFalseUnanswered++;
+            questionHasError = true;
+            feedback.className = "tf-feedback show empty";
+            feedback.textContent = `Chưa chọn. Đáp án đúng: ${correctText}.`;
+          }
+        });
+
+        card.classList.add(questionHasError ? "wrong-card" : "correct-card");
+      });
+
+      const correct = multipleChoiceCorrect + trueFalseCorrect;
+      const wrong = multipleChoiceWrong + trueFalseWrong;
+      const unanswered = multipleChoiceUnanswered + trueFalseUnanswered;
+      // 40 ý có trọng số bằng nhau; 20 ý mỗi phần tương ứng 5 điểm.
+      const score = correct / 4;
+      const partOneScore = multipleChoiceCorrect / 4;
+      const partTwoScore = trueFalseCorrect / 4;
+      const formatScore = value => Number.isInteger(value) ? value.toFixed(0) : value.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
+
+      document.getElementById("scoreCircle").textContent = `${formatScore(score)}/10`;
+      document.getElementById("correctCount").textContent = correct;
+      document.getElementById("wrongCount").textContent = wrong;
+      document.getElementById("emptyCount").textContent = unanswered;
+      document.getElementById("resultTitle").textContent = correct === 40
+        ? "Hoàn thành xuất sắc!"
+        : "Đã có kết quả bài làm";
+      document.getElementById("resultSubtitle").textContent = `Bạn trả lời đúng ${correct}/40 ý. Điểm tổng được tính theo thang 10.`;
+      document.getElementById("resultBreakdown").innerHTML = `
+        <strong>Điểm từng phần</strong><br>
+        Phần I – Trắc nghiệm: ${multipleChoiceCorrect}/20 câu đúng · ${formatScore(partOneScore)}/5 điểm<br>
+        Phần II – Đúng/Sai: ${trueFalseCorrect}/20 ý đúng · ${formatScore(partTwoScore)}/5 điểm<br>
+        <strong>Tổng điểm: ${formatScore(score)}/10</strong>
+      `;
+
+      resultPanel.classList.add("show");
+      submitButton.disabled = true;
+      submitButton.textContent = "Đã nộp bài";
+      submitted = true;
+      resultPanel.focus();
+      resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    quizForm.addEventListener("submit", submitQuiz);
+    resetButton.addEventListener("click", () => {
+      renderQuiz();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    renderQuiz();
+  </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#173b73">
+  <meta name="description" content="Đề cương ôn tập giữa học kì I Khoa học tự nhiên 8 – Phân môn Vật lí.">
+  <title>KHTN 8 – Vật lí | Ôn tập giữa học kì I</title>
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <script src="../assets/js/khtn-vat-li.js" defer></script>
+</head>
+<body>
+  <div class="topbar"></div>
+  <main class="quiz-container">
+    <a class="back-home" href="../index.html">← Về menu chính</a>
+    <header class="quiz-hero">
+      <span class="quiz-eyebrow">ĐỀ CƯƠNG ÔN TẬP · KHTN 8</span>
+      <h1>Giữa học kì I – Phân môn Vật lí</h1>
+      <p>Phần I gồm 15 câu trắc nghiệm; Phần II gồm 11 ý đúng/sai. Thứ tự câu hỏi và đáp án trắc nghiệm Phần I được xáo trộn mỗi lượt. Các ý a–k ở Phần II giữ nguyên thứ tự.</p>
+    </header>
+
+    <section class="progress-panel" aria-label="Tiến độ làm bài">
+      <div>
+        <div class="progress-heading"><span>Tiến độ làm bài</span><span id="progressText">Đã trả lời 0/26 ý</span></div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+      <div class="progress-total"><strong>26</strong><span>Ý CẦN LÀM</span></div>
+    </section>
+
+    <form id="quizForm">
+      <section class="section-heading">
+        <h2>PHẦN I. CÂU TRẮC NGHIỆM NHIỀU PHƯƠNG ÁN LỰA CHỌN</h2>
+        <p>Chọn một đáp án đúng nhất cho mỗi câu hỏi.</p>
+      </section>
+      <section class="question-list" id="questionList" aria-label="15 câu trắc nghiệm"></section>
+
+      <section class="section-heading">
+        <h2>PHẦN II. CÂU TRẮC NGHIỆM ĐÚNG – SAI</h2>
+        <p>Với mỗi phát biểu từ a đến k, chọn Đ (Đúng) hoặc S (Sai). Các ý được giữ nguyên thứ tự như đề cương.</p>
+      </section>
+      <section class="tf-list" id="trueFalseList" aria-label="11 ý đúng sai"></section>
+
+      <div class="submit-panel">
+        <div class="submit-note">
+          <strong>Đã hoàn thành bài làm?</strong>
+          <span>Phần I và Phần II mỗi phần chiếm 5 điểm. Điểm được quy đổi theo thang 10.</span>
+        </div>
+        <div class="actions">
+          <button class="secondary-button" type="button" id="resetButton">Làm lại</button>
+          <button class="primary-button" type="submit" id="submitButton">Nộp bài</button>
+        </div>
+      </div>
+    </form>
+
+    <section class="result-panel" id="resultPanel" aria-live="polite" tabindex="-1">
+      <h2 id="resultTitle">Kết quả bài làm</h2>
+      <p class="result-subtitle" id="resultSubtitle"></p>
+      <div class="result-summary">
+        <div class="score-circle" id="scoreCircle">0/10</div>
+        <div class="result-stats">
+          <div class="stat good"><strong id="correctCount">0</strong><span>Ý đúng / 26</span></div>
+          <div class="stat bad"><strong id="wrongCount">0</strong><span>Ý sai</span></div>
+          <div class="stat empty"><strong id="emptyCount">0</strong><span>Chưa trả lời</span></div>
+        </div>
+      </div>
+      <div class="result-breakdown" id="resultBreakdown"></div>
+      <p class="result-hint">Đáp án đúng được tô xanh. Lựa chọn sai của bạn được tô đỏ. Câu bỏ trống cũng hiển thị đáp án đúng để đối chiếu.</p>
+    </section>
+
+    <footer class="quiz-footer">KHTN 8 · Vật lí · Đề cương giữa học kì I · Có thể mở trực tiếp bằng trình duyệt, không cần Internet.</footer>
+  </main>
+</body>
+</html>
